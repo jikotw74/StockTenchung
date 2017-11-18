@@ -120,15 +120,17 @@ async function crawlGoodInfo(stock_ids){
 
         const bodyHandle = await page.$('body');
         const html = await page.evaluate(body => body.innerHTML, bodyHandle);
-        console.log(html);
+        
         await page.close();
 
         await htmlToJson.parse(html, {
             'messages': function ($doc) {
                 // console.log(this);
-                return this.map('table.solid_1_padding_3_0_tbl tr', function($row, index){
-                    return $row.text()
-                })
+                let trArray = this.map('table.solid_1_padding_3_0_tbl tr', function($row, index){
+                    return [$row.find('td:nth-child(1)').text(), $row.find('td:nth-child(4)').text(), $row.find('td:nth-child(5)').text()];
+                });
+
+                return trArray.filter((item, index) => index > 2 && index < 6)
             }
         })
         .then(function(data){
