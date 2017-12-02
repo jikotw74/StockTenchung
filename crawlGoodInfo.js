@@ -177,10 +177,17 @@ async function crawlMain(stock_ids){
             'messages': function ($doc) {
                 // console.log(this);
                 let trArray = this.map('#listMain tbody tr', function($row, index){
-                    return $row.children().toArray().innerHTML;
+                    console.log();
+                    return {
+                        date: $row.find('td:nth-child(1)').text(),
+                        net: $row.find('td:nth-child(2)').text(),
+                        up: $row.find('td:nth-child(3)').text(),
+                        s5: $row.find('td:nth-child(4)').text(),
+                        s20: $row.find('td:nth-child(5)').text(),
+                    };
                 });
 
-                return trArray.filter((item, index) => index > 2 && index < 6)
+                return trArray.filter((item, index) => index < 6)
             }
         })
         .then(function(data){
